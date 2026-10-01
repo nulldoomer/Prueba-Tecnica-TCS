@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Order(3)
 @Component
-class ClienteActivoRule implements BusinessRule<MovimientoContext> {
+class PropietarioActivoRule implements BusinessRule<MovimientoContext> {
 
     @Override
     public void validate(MovimientoContext context) {
