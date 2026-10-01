@@ -23,7 +23,7 @@ public record ClienteUpdateRequest(
         @Size(min = 1, max = 20, message = "El telefono debe tener entre 1 y 20 caracteres")
         String telefono,
 
-        @Size(min = 4, max = 72, message = "La contrasena debe tener entre 4 y 72 caracteres")
+        @Size(min = 4, max = 30, message = "La contrasena debe tener entre 4 y 30 caracteres")
         String contrasena,
 
         Boolean estado

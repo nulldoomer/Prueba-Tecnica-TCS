@@ -20,7 +20,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class ClienteServiceImpl implements ClienteService {
+class ClienteServiceImpl implements ClienteService {
 
     private final ClienteRepository clienteRepository;
     private final ClienteMapper clienteMapper;

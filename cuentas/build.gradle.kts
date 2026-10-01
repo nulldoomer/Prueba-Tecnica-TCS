@@ -43,6 +43,11 @@ dependencies {
 	testAnnotationProcessor("org.projectlombok:lombok")
 
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.1")
+
+	// Source: https://mvnrepository.com/artifact/org.mapstruct/mapstruct
+	implementation("org.mapstruct:mapstruct:1.6.3")
+	annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
+	annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")
 }
 
 tasks.withType<Test> {
