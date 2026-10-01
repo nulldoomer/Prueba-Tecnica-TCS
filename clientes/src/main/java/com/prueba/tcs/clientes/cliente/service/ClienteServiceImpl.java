@@ -4,11 +4,13 @@ import com.prueba.tcs.clientes.cliente.dto.ClienteRequest;
 import com.prueba.tcs.clientes.cliente.dto.ClienteResponse;
 import com.prueba.tcs.clientes.cliente.dto.ClienteUpdateRequest;
 import com.prueba.tcs.clientes.cliente.entity.ClienteEntity;
+import com.prueba.tcs.clientes.cliente.event.ClienteEvent;
 import com.prueba.tcs.clientes.cliente.mapper.ClienteMapper;
 import com.prueba.tcs.clientes.cliente.repository.ClienteRepository;
 import com.prueba.tcs.clientes.infrastructure.exception.DuplicateResourceException;
 import com.prueba.tcs.clientes.infrastructure.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +27,7 @@ class ClienteServiceImpl implements ClienteService {
     private final ClienteRepository clienteRepository;
     private final ClienteMapper clienteMapper;
     private final PasswordEncoder passwordEncoder;
+    private final ApplicationEventPublisher eventPublisher;
 
 
     // =================
@@ -45,7 +48,10 @@ class ClienteServiceImpl implements ClienteService {
 
         cliente.setContrasena(passwordEncoder.encode(request.contrasena()));
 
-        return clienteMapper.toResponse(clienteRepository.save(cliente));
+        ClienteEntity saved = clienteRepository.save(cliente);
+        eventPublisher.publishEvent(ClienteEvent.of(ClienteEvent.Type.CREATED, saved));
+
+        return clienteMapper.toResponse(saved);
     }
 
 
@@ -86,7 +92,10 @@ class ClienteServiceImpl implements ClienteService {
         clienteMapper.replaceEntity(request, cliente);
         cliente.setContrasena(passwordEncoder.encode(request.contrasena()));
 
-        return clienteMapper.toResponse(clienteRepository.saveAndFlush(cliente));
+        ClienteEntity saved = clienteRepository.saveAndFlush(cliente);
+        eventPublisher.publishEvent(ClienteEvent.of(ClienteEvent.Type.UPDATED, saved));
+
+        return clienteMapper.toResponse(saved);
     }
 
 
@@ -102,7 +111,10 @@ class ClienteServiceImpl implements ClienteService {
             cliente.setContrasena(passwordEncoder.encode(request.contrasena()));
         }
         // Flush so @LastModifiedDate is applied before building the response
-        return clienteMapper.toResponse(clienteRepository.saveAndFlush(cliente));
+        ClienteEntity saved = clienteRepository.saveAndFlush(cliente);
+        eventPublisher.publishEvent(ClienteEvent.of(ClienteEvent.Type.UPDATED, saved));
+
+        return clienteMapper.toResponse(saved);
     }
 
 
@@ -111,7 +123,9 @@ class ClienteServiceImpl implements ClienteService {
     public void delete(UUID id) {
 
         // Logical delete: the record is kept to have historic data.
-        getCliente(id).setEstado(false);
+        ClienteEntity cliente = getCliente(id);
+        cliente.setEstado(false);
+        eventPublisher.publishEvent(ClienteEvent.of(ClienteEvent.Type.DEACTIVATED, cliente));
     }
 
     // TODO: Implementar busquedas personalizadas por campos y cambios de estados

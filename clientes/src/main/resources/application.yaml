@@ -26,6 +26,10 @@ spring:
     username: ${RABBITMQ_USER:tcs}
     password: ${RABBITMQ_PASSWORD:tcs}
 
+logging:
+  pattern:
+    correlation: "[%X{correlationId:-}] "
+
 management:
   endpoints:
     web:
