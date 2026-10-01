@@ -1,0 +1,699 @@
+{
+  "info": {
+    "_postman_id": "8ec4ec9a-e4d6-4275-8737-bfdbc6a238af",
+    "name": "Prueba Tecnica TCS",
+    "description": "Validacion de endpoints. Ejecutar en orden con el Collection Runner: las carpetas comparten variables (ids e identificaciones generadas).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53345757",
+    "_collection_link": "https://go.postman.co/collection/53345757-8ec4ec9a-e4d6-4275-8737-bfdbc6a238af?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Clientes",
+      "item": [
+        {
+          "name": "1. Creacion de usuarios",
+          "item": [
+            {
+              "name": "Crear cliente Jose Lema",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.collectionVariables.set(\"joseIdentificacion\", \"17\" + String(Math.floor(Math.random() * 1e8)).padStart(8, \"0\"));"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 201 Created\", () => pm.response.to.have.status(201));",
+                      "const json = pm.response.json();",
+                      "pm.test(\"success = true\", () => pm.expect(json.success).to.eql(true));",
+                      "pm.test(\"Nombre = Jose Lema\", () => pm.expect(json.result.nombre).to.eql(\"Jose Lema\"));",
+                      "pm.test(\"No expone la contrasena\", () => pm.expect(json.result).to.not.have.property(\"contrasena\"));",
+                      "pm.test(\"Header Location presente\", () => pm.response.to.have.header(\"Location\"));",
+                      "pm.collectionVariables.set(\"joseId\", json.result.clienteId);"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nombre\": \"Jose Lema\",\n  \"genero\": \"MASCULINO\",\n  \"edad\": 35,\n  \"identificacion\": \"{{joseIdentificacion}}\",\n  \"direccion\": \"Otavalo sn y principal\",\n  \"telefono\": \"098254785\",\n  \"contrasena\": \"1234\",\n  \"estado\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/clientes",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "clientes"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Crear cliente Marianela Montalvo",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.collectionVariables.set(\"marianelaIdentificacion\", \"17\" + String(Math.floor(Math.random() * 1e8)).padStart(8, \"0\"));"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 201 Created\", () => pm.response.to.have.status(201));",
+                      "const json = pm.response.json();",
+                      "pm.test(\"success = true\", () => pm.expect(json.success).to.eql(true));",
+                      "pm.test(\"Nombre = Marianela Montalvo\", () => pm.expect(json.result.nombre).to.eql(\"Marianela Montalvo\"));",
+                      "pm.test(\"No expone la contrasena\", () => pm.expect(json.result).to.not.have.property(\"contrasena\"));",
+                      "pm.test(\"Header Location presente\", () => pm.response.to.have.header(\"Location\"));",
+                      "pm.collectionVariables.set(\"marianelaId\", json.result.clienteId);"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nombre\": \"Marianela Montalvo\",\n  \"genero\": \"FEMENINO\",\n  \"edad\": 30,\n  \"identificacion\": \"{{marianelaIdentificacion}}\",\n  \"direccion\": \"Amazonas y NNUU\",\n  \"telefono\": \"097548965\",\n  \"contrasena\": \"5678\",\n  \"estado\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/clientes",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "clientes"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Crear cliente Juan Osorio",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.collectionVariables.set(\"juanIdentificacion\", \"17\" + String(Math.floor(Math.random() * 1e8)).padStart(8, \"0\"));"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 201 Created\", () => pm.response.to.have.status(201));",
+                      "const json = pm.response.json();",
+                      "pm.test(\"success = true\", () => pm.expect(json.success).to.eql(true));",
+                      "pm.test(\"Nombre = Juan Osorio\", () => pm.expect(json.result.nombre).to.eql(\"Juan Osorio\"));",
+                      "pm.test(\"No expone la contrasena\", () => pm.expect(json.result).to.not.have.property(\"contrasena\"));",
+                      "pm.test(\"Header Location presente\", () => pm.response.to.have.header(\"Location\"));",
+                      "pm.collectionVariables.set(\"juanId\", json.result.clienteId);"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nombre\": \"Juan Osorio\",\n  \"genero\": \"MASCULINO\",\n  \"edad\": 40,\n  \"identificacion\": \"{{juanIdentificacion}}\",\n  \"direccion\": \"13 junio y Equinoccial\",\n  \"telefono\": \"098874587\",\n  \"contrasena\": \"1245\",\n  \"estado\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/clientes",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "clientes"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ],
+          "description": "Caso de uso 1 del documento. genero, edad e identificacion no estan en el documento: se usan valores de ejemplo y la identificacion se genera aleatoria para poder re-ejecutar la coleccion."
+        },
+        {
+          "name": "2. Consultas",
+          "item": [
+            {
+              "name": "Listar clientes paginado",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 200 OK\", () => pm.response.to.have.status(200));\nconst json = pm.response.json();\npm.test(\"success = true\", () => pm.expect(json.success).to.eql(true));\npm.test(\"Contiene content y page\", () => {\n    pm.expect(json.result).to.have.property(\"content\");\n    pm.expect(json.result.page.size).to.eql(5);\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/clientes?page=0&size=5&sort=nombre,asc",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "clientes"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "5"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "nombre,asc"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Buscar cliente por id (Jose Lema)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 200 OK\", () => pm.response.to.have.status(200));",
+                      "const json = pm.response.json();",
+                      "pm.test(\"success = true\", () => pm.expect(json.success).to.eql(true));",
+                      "pm.test(\"Id coincide\", () => pm.expect(json.result.clienteId).to.eql(pm.collectionVariables.get(\"joseId\")));"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/clientes/{{joseId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "clientes",
+                    "{{joseId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Buscar cliente por identificacion (Marianela Montalvo)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 200 OK\", () => pm.response.to.have.status(200));",
+                      "const json = pm.response.json();",
+                      "pm.test(\"success = true\", () => pm.expect(json.success).to.eql(true));",
+                      "pm.test(\"Nombre = Marianela Montalvo\", () => pm.expect(json.result.nombre).to.eql(\"Marianela Montalvo\"));"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/clientes/identificacion/{{marianelaIdentificacion}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "clientes",
+                    "identificacion",
+                    "{{marianelaIdentificacion}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "4. Eliminacion logica",
+          "item": [
+            {
+              "name": "Desactivar cliente Juan Osorio (DELETE logico)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 200 OK\", () => pm.response.to.have.status(200));",
+                      "const json = pm.response.json();",
+                      "pm.test(\"success = true\", () => pm.expect(json.success).to.eql(true));"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/clientes/{{juanId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "clientes",
+                    "{{juanId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Verificar Juan Osorio inactivo",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 200 OK\", () => pm.response.to.have.status(200));",
+                      "const json = pm.response.json();",
+                      "pm.test(\"success = true\", () => pm.expect(json.success).to.eql(true));",
+                      "pm.test(\"estado = false\", () => pm.expect(json.result.estado).to.eql(false));"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/clientes/{{juanId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "clientes",
+                    "{{juanId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "3. Actualizaciones",
+          "item": [
+            {
+              "name": "Reemplazar cliente Jose Lema (PUT)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 200 OK\", () => pm.response.to.have.status(200));",
+                      "const json = pm.response.json();",
+                      "pm.test(\"success = true\", () => pm.expect(json.success).to.eql(true));",
+                      "pm.test(\"Edad actualizada a 36\", () => pm.expect(json.result.edad).to.eql(36));"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nombre\": \"Jose Lema\",\n  \"genero\": \"MASCULINO\",\n  \"edad\": 36,\n  \"identificacion\": \"{{joseIdentificacion}}\",\n  \"direccion\": \"Otavalo sn y principal\",\n  \"telefono\": \"098254785\",\n  \"contrasena\": \"1234\",\n  \"estado\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/clientes/{{joseId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "clientes",
+                    "{{joseId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Actualizar direccion de Marianela Montalvo (PATCH)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 200 OK\", () => pm.response.to.have.status(200));",
+                      "const json = pm.response.json();",
+                      "pm.test(\"success = true\", () => pm.expect(json.success).to.eql(true));",
+                      "pm.test(\"Direccion actualizada\", () => pm.expect(json.result.direccion).to.eql(\"Amazonas y Naciones Unidas\"));",
+                      "pm.test(\"Telefono sin cambios\", () => pm.expect(json.result.telefono).to.eql(\"097548965\"));"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"direccion\": \"Amazonas y Naciones Unidas\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/clientes/{{marianelaId}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "clientes",
+                    "{{marianelaId}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "5. Errores",
+          "item": [
+            {
+              "name": "Crear cliente con identificacion duplicada",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 409 Conflict\", () => pm.response.to.have.status(409));",
+                      "const json = pm.response.json();",
+                      "pm.test(\"success = false\", () => pm.expect(json.success).to.eql(false));",
+                      "pm.test(\"messageCode = DUPLICATE_RESOURCE\", () => pm.expect(json.messageCode).to.eql(\"DUPLICATE_RESOURCE\"));"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nombre\": \"Jose Lema Duplicado\",\n  \"genero\": \"MASCULINO\",\n  \"edad\": 35,\n  \"identificacion\": \"{{joseIdentificacion}}\",\n  \"direccion\": \"Otavalo\",\n  \"telefono\": \"098254785\",\n  \"contrasena\": \"1234\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/clientes",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "clientes"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Crear cliente con datos invalidos",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 400 Bad Request\", () => pm.response.to.have.status(400));",
+                      "const json = pm.response.json();",
+                      "pm.test(\"success = false\", () => pm.expect(json.success).to.eql(false));",
+                      "pm.test(\"messageCode = VALIDATION_ERROR\", () => pm.expect(json.messageCode).to.eql(\"VALIDATION_ERROR\"));",
+                      "pm.test(\"Detalla los campos invalidos\", () => pm.expect(json.result.metadata).to.include.keys(\"nombre\", \"edad\", \"contrasena\"));"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nombre\": \"\",\n  \"edad\": -1,\n  \"contrasena\": \"1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/clientes",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "clientes"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Buscar cliente inexistente",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 404 Not Found\", () => pm.response.to.have.status(404));",
+                      "const json = pm.response.json();",
+                      "pm.test(\"success = false\", () => pm.expect(json.success).to.eql(false));",
+                      "pm.test(\"messageCode = RESOURCE_NOT_FOUND\", () => pm.expect(json.messageCode).to.eql(\"RESOURCE_NOT_FOUND\"));"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/clientes/00000000-0000-0000-0000-000000000000",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "clientes",
+                    "00000000-0000-0000-0000-000000000000"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Buscar cliente con id invalido",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 400 Bad Request\", () => pm.response.to.have.status(400));",
+                      "const json = pm.response.json();",
+                      "pm.test(\"success = false\", () => pm.expect(json.success).to.eql(false));",
+                      "pm.test(\"messageCode = TYPE_MISMATCH\", () => pm.expect(json.messageCode).to.eql(\"TYPE_MISMATCH\"));"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/clientes/no-es-un-uuid",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "clientes",
+                    "no-es-un-uuid"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Listar ordenando por propiedad inexistente",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 400 Bad Request\", () => pm.response.to.have.status(400));",
+                      "const json = pm.response.json();",
+                      "pm.test(\"success = false\", () => pm.expect(json.success).to.eql(false));",
+                      "pm.test(\"messageCode = INVALID_SORT_PROPERTY\", () => pm.expect(json.messageCode).to.eql(\"INVALID_SORT_PROPERTY\"));"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/clientes?sort=campoInexistente",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "clientes"
+                  ],
+                  "query": [
+                    {
+                      "key": "sort",
+                      "value": "campoInexistente"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8081/api"
+    },
+    {
+      "key": "joseIdentificacion",
+      "value": ""
+    },
+    {
+      "key": "joseId",
+      "value": ""
+    },
+    {
+      "key": "marianelaIdentificacion",
+      "value": ""
+    },
+    {
+      "key": "marianelaId",
+      "value": ""
+    },
+    {
+      "key": "juanIdentificacion",
+      "value": ""
+    },
+    {
+      "key": "juanId",
+      "value": ""
+    }
+  ]
+}
