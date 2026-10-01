@@ -31,7 +31,7 @@ public class CuentaEntity extends Auditable {
     private BigDecimal saldoInicial;
 
     /**
-     * Current balance, updated on every movimiento to avoid summing the whole history.
+     * Current balance, updated on every movimiento.
      */
     @Column(name = "saldo_disponible", nullable = false, precision = 11, scale = 2)
     private BigDecimal saldoDisponible;
