@@ -24,10 +24,9 @@ class ClienteEventListener {
     private final ClienteRefService clienteRefService;
 
     @RabbitListener(queues = RabbitConfig.CLIENTE_EVENTS_QUEUE)
-    public void onClienteEvent(@Payload ClienteEvent event,
-                               @Header(name = AmqpHeaders.CORRELATION_ID, required = false)
-                               String correlationId)
-    {
+    public void onClienteEvent(
+            @Payload ClienteEvent event,
+            @Header(name = AmqpHeaders.CORRELATION_ID, required = false) String correlationId) {
 
         if (correlationId != null) {
             MDC.put(CorrelationIdFilter.MDC_KEY, correlationId);

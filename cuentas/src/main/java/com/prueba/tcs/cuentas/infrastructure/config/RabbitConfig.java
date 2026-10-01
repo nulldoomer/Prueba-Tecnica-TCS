@@ -37,8 +37,7 @@ public class RabbitConfig {
     @Bean
     public Binding clienteEventsBinding(Queue clienteEventsQueue, TopicExchange clientesExchange) {
 
-        return BindingBuilder.bind(clienteEventsQueue).to(clientesExchange).
-                with(CLIENTE_EVENTS_ROUTING_KEY);
+        return BindingBuilder.bind(clienteEventsQueue).to(clientesExchange).with(CLIENTE_EVENTS_ROUTING_KEY);
     }
 
     /**

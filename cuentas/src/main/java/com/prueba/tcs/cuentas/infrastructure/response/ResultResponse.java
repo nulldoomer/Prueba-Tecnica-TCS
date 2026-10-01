@@ -1,11 +1,10 @@
 package com.prueba.tcs.cuentas.infrastructure.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Getter;
-import org.springframework.http.HttpStatus;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 /**
  * Standard envelope for every API response, successful or not.
@@ -75,14 +74,16 @@ public class ResultResponse<T, E> {
     /**
      * Failed response with a list of error details (e.g. bean validation errors).
      */
-    public static <T, E> ResultResponse<T, E> failure(HttpStatus status, List<E> errors, String message, String messageCode) {
+    public static <T, E> ResultResponse<T, E> failure(
+            HttpStatus status, List<E> errors, String message, String messageCode) {
         return failure(status, null, errors, message, messageCode);
     }
 
     /**
      * Failed response carrying an error detail object as result (e.g. {@code ExceptionResponse}).
      */
-    public static <T, E> ResultResponse<T, E> failure(HttpStatus status, T result, List<E> errors, String message, String messageCode) {
+    public static <T, E> ResultResponse<T, E> failure(
+            HttpStatus status, T result, List<E> errors, String message, String messageCode) {
         return new ResultResponse<>(status.value(), false, result, errors, message, messageCode);
     }
 }

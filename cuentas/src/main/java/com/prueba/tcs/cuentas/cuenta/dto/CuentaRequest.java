@@ -2,12 +2,10 @@ package com.prueba.tcs.cuentas.cuenta.dto;
 
 import com.prueba.tcs.cuentas.cuenta.TipoCuenta;
 import jakarta.validation.constraints.*;
-
 import java.math.BigDecimal;
 import java.util.UUID;
 
 public record CuentaRequest(
-
         @NotBlank(message = "El numero de cuenta es obligatorio")
         @Size(max = 20, message = "El numero de cuenta no puede superar 20 caracteres")
         @Pattern(regexp = "\\d+", message = "El numero de cuenta solo puede contener digitos")
@@ -23,7 +21,4 @@ public record CuentaRequest(
 
         Boolean estado,
 
-        @NotNull(message = "El cliente es obligatorio")
-        UUID clienteId
-) {
-}
+        @NotNull(message = "El cliente es obligatorio") UUID clienteId) {}

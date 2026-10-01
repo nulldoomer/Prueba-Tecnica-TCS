@@ -9,6 +9,7 @@ import com.prueba.tcs.clientes.cliente.mapper.ClienteMapper;
 import com.prueba.tcs.clientes.cliente.repository.ClienteRepository;
 import com.prueba.tcs.clientes.infrastructure.exception.DuplicateResourceException;
 import com.prueba.tcs.clientes.infrastructure.exception.ResourceNotFoundException;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
@@ -16,8 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +27,6 @@ class ClienteServiceImpl implements ClienteService {
     private final ClienteMapper clienteMapper;
     private final PasswordEncoder passwordEncoder;
     private final ApplicationEventPublisher eventPublisher;
-
 
     // =================
     // ----- CRUD ------
@@ -42,7 +40,7 @@ class ClienteServiceImpl implements ClienteService {
 
         ClienteEntity cliente = clienteMapper.toEntity(request);
 
-        if(cliente.getEstado() == null){
+        if (cliente.getEstado() == null) {
             cliente.setEstado(true);
         }
 
@@ -54,30 +52,26 @@ class ClienteServiceImpl implements ClienteService {
         return clienteMapper.toResponse(saved);
     }
 
-
     @Override
     public ClienteResponse findById(UUID id) {
 
         return clienteMapper.toResponse(getCliente(id));
     }
 
-
     @Override
     public ClienteResponse findByIdentificacion(String identificacion) {
 
-        return clienteRepository.findByIdentificacion(identificacion)
+        return clienteRepository
+                .findByIdentificacion(identificacion)
                 .map(clienteMapper::toResponse)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Cliente con identificacion " + identificacion + " no encontrado")
-                );
+                        "Cliente con identificacion " + identificacion + " no encontrado"));
     }
-
 
     @Override
     public Page<ClienteResponse> findAll(Pageable pageable) {
         return clienteRepository.findAll(pageable).map(clienteMapper::toResponse);
     }
-
 
     @Override
     @Transactional
@@ -98,7 +92,6 @@ class ClienteServiceImpl implements ClienteService {
         return clienteMapper.toResponse(saved);
     }
 
-
     @Override
     @Transactional
     public ClienteResponse update(UUID id, ClienteUpdateRequest request) {
@@ -117,7 +110,6 @@ class ClienteServiceImpl implements ClienteService {
         return clienteMapper.toResponse(saved);
     }
 
-
     @Override
     @Transactional
     public void delete(UUID id) {
@@ -130,7 +122,6 @@ class ClienteServiceImpl implements ClienteService {
 
     // TODO: Implementar busquedas personalizadas por campos y cambios de estados
 
-
     // =====================
     // ----- HELPERS --------
     // =====================
@@ -138,17 +129,14 @@ class ClienteServiceImpl implements ClienteService {
     private void validateIdentificacionAvailable(String identificacion) {
 
         if (clienteRepository.existsByIdentificacion(identificacion)) {
-            throw new DuplicateResourceException(
-                    "Ya existe un cliente con identificacion " + identificacion
-            );
+            throw new DuplicateResourceException("Ya existe un cliente con identificacion " + identificacion);
         }
     }
 
     private ClienteEntity getCliente(UUID id) {
 
-        return clienteRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Cliente con id "
-                        + id + " no encontrado")
-                );
+        return clienteRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente con id " + id + " no encontrado"));
     }
 }

@@ -4,13 +4,11 @@ import com.prueba.tcs.clientes.persona.Genero;
 import jakarta.validation.constraints.*;
 
 public record ClienteRequest(
-
         @NotBlank(message = "El nombre es obligatorio")
         @Size(max = 100, message = "El nombre no puede superar 100 caracteres")
         String nombre,
 
-        @NotNull(message = "El genero es obligatorio")
-        Genero genero,
+        @NotNull(message = "El genero es obligatorio") Genero genero,
 
         @NotNull(message = "La edad es obligatoria")
         @Min(value = 0, message = "La edad no puede ser negativa")
@@ -33,6 +31,4 @@ public record ClienteRequest(
         @Size(min = 4, max = 30, message = "La contrasena debe tener entre 4 y 30 caracteres")
         String contrasena,
 
-        Boolean estado
-) {
-}
+        Boolean estado) {}

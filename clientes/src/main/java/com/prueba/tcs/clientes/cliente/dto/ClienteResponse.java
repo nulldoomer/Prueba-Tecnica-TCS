@@ -1,7 +1,6 @@
 package com.prueba.tcs.clientes.cliente.dto;
 
 import com.prueba.tcs.clientes.persona.Genero;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -15,6 +14,4 @@ public record ClienteResponse(
         String telefono,
         Boolean estado,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
-) {
-}
+        LocalDateTime updatedAt) {}

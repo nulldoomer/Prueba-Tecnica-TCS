@@ -6,6 +6,8 @@ import com.prueba.tcs.clientes.cliente.dto.ClienteUpdateRequest;
 import com.prueba.tcs.clientes.cliente.service.ClienteService;
 import com.prueba.tcs.clientes.infrastructure.response.ResultResponse;
 import jakarta.validation.Valid;
+import java.net.URI;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -13,9 +15,6 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
-import java.util.UUID;
 
 /**
  * REST endpoints for clientes.
@@ -34,8 +33,7 @@ public class ClienteController {
      * @return 201 with the created cliente and its URI in the Location header
      */
     @PostMapping
-    public ResponseEntity<ResultResponse<ClienteResponse, String>> create(
-            @Valid @RequestBody ClienteRequest request) {
+    public ResponseEntity<ResultResponse<ClienteResponse, String>> create(@Valid @RequestBody ClienteRequest request) {
 
         ClienteResponse cliente = clienteService.create(request);
 
@@ -57,9 +55,7 @@ public class ClienteController {
     public ResponseEntity<ResultResponse<PagedModel<ClienteResponse>, String>> findAll(
             @PageableDefault(sort = "nombre") Pageable pageable) {
 
-        return ResponseEntity.ok(ResultResponse.success(
-                new PagedModel<>(clienteService.findAll(pageable)))
-        );
+        return ResponseEntity.ok(ResultResponse.success(new PagedModel<>(clienteService.findAll(pageable))));
     }
 
     /**
@@ -69,12 +65,9 @@ public class ClienteController {
      * @return 200 with the cliente, or 404 if it does not exist
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ResultResponse<ClienteResponse, String>> findById(
-            @PathVariable UUID id) {
+    public ResponseEntity<ResultResponse<ClienteResponse, String>> findById(@PathVariable UUID id) {
 
-        return ResponseEntity.ok(ResultResponse.success(
-                clienteService.findById(id))
-        );
+        return ResponseEntity.ok(ResultResponse.success(clienteService.findById(id)));
     }
 
     /**
@@ -87,9 +80,7 @@ public class ClienteController {
     public ResponseEntity<ResultResponse<ClienteResponse, String>> findByIdentificacion(
             @PathVariable String identificacion) {
 
-        return ResponseEntity.ok(ResultResponse.success(
-                clienteService.findByIdentificacion(identificacion))
-        );
+        return ResponseEntity.ok(ResultResponse.success(clienteService.findByIdentificacion(identificacion)));
     }
 
     /**
@@ -103,10 +94,8 @@ public class ClienteController {
     public ResponseEntity<ResultResponse<ClienteResponse, String>> replace(
             @PathVariable UUID id, @Valid @RequestBody ClienteRequest request) {
 
-        return ResponseEntity.ok(ResultResponse.success(
-                clienteService.replace(id, request), "Cliente actualizado",
-                "CLIENTE_UPDATED")
-        );
+        return ResponseEntity.ok(
+                ResultResponse.success(clienteService.replace(id, request), "Cliente actualizado", "CLIENTE_UPDATED"));
     }
 
     /**
@@ -119,10 +108,8 @@ public class ClienteController {
     @PatchMapping("/{id}")
     public ResponseEntity<ResultResponse<ClienteResponse, String>> update(
             @PathVariable UUID id, @Valid @RequestBody ClienteUpdateRequest request) {
-        return ResponseEntity.ok(ResultResponse.success(
-                clienteService.update(id, request), "Cliente actualizado",
-                "CLIENTE_UPDATED")
-        );
+        return ResponseEntity.ok(
+                ResultResponse.success(clienteService.update(id, request), "Cliente actualizado", "CLIENTE_UPDATED"));
     }
 
     /**
@@ -134,8 +121,6 @@ public class ClienteController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ResultResponse<Void, String>> delete(@PathVariable UUID id) {
         clienteService.delete(id);
-        return ResponseEntity.ok(ResultResponse.success(null,
-                "Cliente desactivado", "CLIENTE_DEACTIVATED")
-        );
+        return ResponseEntity.ok(ResultResponse.success(null, "Cliente desactivado", "CLIENTE_DEACTIVATED"));
     }
 }

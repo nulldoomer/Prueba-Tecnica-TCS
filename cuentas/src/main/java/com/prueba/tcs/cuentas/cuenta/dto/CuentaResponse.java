@@ -1,7 +1,6 @@
 package com.prueba.tcs.cuentas.cuenta.dto;
 
 import com.prueba.tcs.cuentas.cuenta.TipoCuenta;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -16,6 +15,4 @@ public record CuentaResponse(
         UUID clienteId,
         String clienteNombre,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt
-) {
-}
+        LocalDateTime updatedAt) {}

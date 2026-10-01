@@ -1,9 +1,8 @@
 package com.prueba.tcs.cuentas.infrastructure.exception;
 
+import java.util.Map;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
-
-import java.util.Map;
 
 /**
  * Base class for business rule violations. Each subclass defines its HTTP status and error code,
@@ -26,5 +25,4 @@ public abstract class BusinessException extends RuntimeException {
         this.errorCode = errorCode;
         this.metadata = metadata == null ? null : Map.copyOf(metadata);
     }
-
 }

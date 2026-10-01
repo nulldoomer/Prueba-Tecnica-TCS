@@ -2,6 +2,7 @@ plugins {
 	java
 	id("org.springframework.boot") version "4.0.8"
 	id("io.spring.dependency-management") version "1.1.7"
+	id("com.diffplug.spotless") version "8.10.3"
 }
 
 group = "com.prueba.tcs"
@@ -49,6 +50,16 @@ dependencies {
 	implementation("org.mapstruct:mapstruct:1.6.3")
 	annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
 	annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")
+}
+
+// spotlessCheck runs with `check`/`build`; `./gradlew spotlessApply` fixes the formatting
+spotless {
+	java {
+		removeUnusedImports()
+		palantirJavaFormat("2.100.0")
+		trimTrailingWhitespace()
+		endWithNewline()
+	}
 }
 
 tasks.withType<Test> {

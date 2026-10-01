@@ -3,6 +3,9 @@ package com.prueba.tcs.cuentas.infrastructure.exception;
 import com.prueba.tcs.cuentas.infrastructure.response.ExceptionResponse;
 import com.prueba.tcs.cuentas.infrastructure.response.ResultResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -20,10 +23,6 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 /**
  * Global application exception handler.
  */
@@ -38,8 +37,13 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ResultResponse<ExceptionResponse, Void>> handleBusiness(
             BusinessException ex, HttpServletRequest request) {
         log.warn("Business exception [{}]: {} - Path: {}", ex.getErrorCode(), ex.getMessage(), request.getRequestURI());
-        return ResponseEntity.status(ex.getHttpStatus()).body(failure(
-                ex.getHttpStatus(), ex.getErrorCode(), ex.getMessage(), ex.getMetadata(), request.getRequestURI()));
+        return ResponseEntity.status(ex.getHttpStatus())
+                .body(failure(
+                        ex.getHttpStatus(),
+                        ex.getErrorCode(),
+                        ex.getMessage(),
+                        ex.getMetadata(),
+                        request.getRequestURI()));
     }
 
     /**
@@ -49,8 +53,8 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ResultResponse<ExceptionResponse, Void>> handleInvalidSort(
             PropertyReferenceException ex, HttpServletRequest request) {
         String message = "No se puede ordenar por la propiedad '%s'".formatted(ex.getPropertyName());
-        return ResponseEntity.badRequest().body(failure(HttpStatus.BAD_REQUEST, "INVALID_SORT_PROPERTY",
-                message, null, request.getRequestURI()));
+        return ResponseEntity.badRequest()
+                .body(failure(HttpStatus.BAD_REQUEST, "INVALID_SORT_PROPERTY", message, null, request.getRequestURI()));
     }
 
     /**
@@ -59,18 +63,30 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ResultResponse<ExceptionResponse, Void>> handleDataIntegrity(
             DataIntegrityViolationException ex, HttpServletRequest request) {
-        log.warn("Data integrity violation on path {}: {}", request.getRequestURI(),
+        log.warn(
+                "Data integrity violation on path {}: {}",
+                request.getRequestURI(),
                 ex.getMostSpecificCause().getMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(failure(HttpStatus.CONFLICT, "DATA_INTEGRITY_VIOLATION",
-                "La operacion viola una restriccion de datos", null, request.getRequestURI()));
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(failure(
+                        HttpStatus.CONFLICT,
+                        "DATA_INTEGRITY_VIOLATION",
+                        "La operacion viola una restriccion de datos",
+                        null,
+                        request.getRequestURI()));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResultResponse<ExceptionResponse, Void>> handleUnexpected(
             Exception ex, HttpServletRequest request) {
         log.error("Unexpected exception on path: {}", request.getRequestURI(), ex);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(failure(HttpStatus.INTERNAL_SERVER_ERROR,
-                "INTERNAL_ERROR", "Ocurrio un error inesperado", null, request.getRequestURI()));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(failure(
+                        HttpStatus.INTERNAL_SERVER_ERROR,
+                        "INTERNAL_ERROR",
+                        "Ocurrio un error inesperado",
+                        null,
+                        request.getRequestURI()));
     }
 
     /**
@@ -79,14 +95,19 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        Map<String, Object> metadata = ex.getBindingResult().getFieldErrors().stream().collect(Collectors.toMap(
-                FieldError::getField,
-                error -> String.valueOf(error.getDefaultMessage()),
-                (first, second) -> first + "; " + second,
-                LinkedHashMap::new));
-        return ResponseEntity.badRequest().body(failure(
-                HttpStatus.BAD_REQUEST, "VALIDATION_ERROR", "La solicitud contiene datos invalidos",
-                metadata, path(request)));
+        Map<String, Object> metadata = ex.getBindingResult().getFieldErrors().stream()
+                .collect(Collectors.toMap(
+                        FieldError::getField,
+                        error -> String.valueOf(error.getDefaultMessage()),
+                        (first, second) -> first + "; " + second,
+                        LinkedHashMap::new));
+        return ResponseEntity.badRequest()
+                .body(failure(
+                        HttpStatus.BAD_REQUEST,
+                        "VALIDATION_ERROR",
+                        "La solicitud contiene datos invalidos",
+                        metadata,
+                        path(request)));
     }
 
     /**
@@ -98,10 +119,12 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         Map<String, Object> metadata = new LinkedHashMap<>();
         metadata.put("parameter", ex.getPropertyName());
         metadata.put("value", ex.getValue());
-        metadata.put("requiredType", ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "unknown");
+        metadata.put(
+                "requiredType",
+                ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "unknown");
         String message = "Valor invalido '%s' para el parametro '%s'".formatted(ex.getValue(), ex.getPropertyName());
-        return ResponseEntity.badRequest().body(failure(
-                HttpStatus.BAD_REQUEST, "TYPE_MISMATCH", message, metadata, path(request)));
+        return ResponseEntity.badRequest()
+                .body(failure(HttpStatus.BAD_REQUEST, "TYPE_MISMATCH", message, metadata, path(request)));
     }
 
     /**
@@ -114,8 +137,9 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         String message = body instanceof ProblemDetail problem && problem.getDetail() != null
                 ? problem.getDetail()
                 : ex.getMessage();
-        return ResponseEntity.status(status).headers(headers).body(failure(
-                status, status.name(), message, null, path(request)));
+        return ResponseEntity.status(status)
+                .headers(headers)
+                .body(failure(status, status.name(), message, null, path(request)));
     }
 
     private ResultResponse<ExceptionResponse, Void> failure(
@@ -124,6 +148,8 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private String path(WebRequest request) {
-        return request instanceof ServletWebRequest servletRequest ? servletRequest.getRequest().getRequestURI() : null;
+        return request instanceof ServletWebRequest servletRequest
+                ? servletRequest.getRequest().getRequestURI()
+                : null;
     }
 }

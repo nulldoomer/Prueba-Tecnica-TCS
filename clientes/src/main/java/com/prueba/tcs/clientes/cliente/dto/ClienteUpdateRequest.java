@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Size;
 
 // Partial update
 public record ClienteUpdateRequest(
-
         @Size(min = 1, max = 100, message = "El nombre debe tener entre 1 y 100 caracteres")
         String nombre,
 
@@ -26,6 +25,4 @@ public record ClienteUpdateRequest(
         @Size(min = 4, max = 30, message = "La contrasena debe tener entre 4 y 30 caracteres")
         String contrasena,
 
-        Boolean estado
-) {
-}
+        Boolean estado) {}

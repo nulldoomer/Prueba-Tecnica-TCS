@@ -15,13 +15,7 @@ import java.util.UUID;
  * @param occurredAt when the change happened in clientes
  */
 public record ClienteEvent(
-        UUID eventId,
-        Type eventType,
-        UUID clienteId,
-        String nombre,
-        Boolean estado,
-        LocalDateTime occurredAt
-) {
+        UUID eventId, Type eventType, UUID clienteId, String nombre, Boolean estado, LocalDateTime occurredAt) {
 
     public enum Type {
         CREATED,

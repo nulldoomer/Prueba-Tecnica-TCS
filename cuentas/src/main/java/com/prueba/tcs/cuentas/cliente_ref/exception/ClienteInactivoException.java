@@ -1,9 +1,8 @@
 package com.prueba.tcs.cuentas.cliente_ref.exception;
 
 import com.prueba.tcs.cuentas.infrastructure.exception.BusinessException;
-import org.springframework.http.HttpStatus;
-
 import java.util.UUID;
+import org.springframework.http.HttpStatus;
 
 /**
  * Thrown when opening a cuenta for a cliente whose estado is false.

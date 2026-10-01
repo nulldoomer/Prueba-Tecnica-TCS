@@ -3,15 +3,14 @@ package com.prueba.tcs.cuentas.movimiento.entity;
 import com.prueba.tcs.cuentas.cuenta.entity.CuentaEntity;
 import com.prueba.tcs.cuentas.movimiento.TipoMovimiento;
 import jakarta.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 /**
  * Immutable record of a transaction, because it can't be deleted or updated to

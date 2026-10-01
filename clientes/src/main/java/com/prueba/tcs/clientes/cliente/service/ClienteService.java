@@ -5,10 +5,9 @@ import com.prueba.tcs.clientes.cliente.dto.ClienteResponse;
 import com.prueba.tcs.clientes.cliente.dto.ClienteUpdateRequest;
 import com.prueba.tcs.clientes.infrastructure.exception.DuplicateResourceException;
 import com.prueba.tcs.clientes.infrastructure.exception.ResourceNotFoundException;
+import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.UUID;
 
 /**
  * Use cases for managing clientes.

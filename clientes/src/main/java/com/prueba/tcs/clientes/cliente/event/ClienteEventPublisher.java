@@ -30,21 +30,16 @@ class ClienteEventPublisher {
 
         String correlationId = MDC.get(CorrelationIdFilter.MDC_KEY);
         try {
-            rabbitTemplate.convertAndSend(RabbitConfig.EXCHANGE, event.routingKey(),
-                    event, message ->
-                    {
-                        message.getMessageProperties().setCorrelationId(correlationId);
-                        return message;
-                    }
-            );
+            rabbitTemplate.convertAndSend(RabbitConfig.EXCHANGE, event.routingKey(), event, message -> {
+                message.getMessageProperties().setCorrelationId(correlationId);
+                return message;
+            });
 
             log.info("Published {} for cliente {}", event.routingKey(), event.clienteId());
 
         } catch (AmqpException ex) {
 
-            log.error("Could not publish {} for cliente {}", event.routingKey(),
-                    event.clienteId(), ex
-            );
+            log.error("Could not publish {} for cliente {}", event.routingKey(), event.clienteId(), ex);
         }
     }
 }

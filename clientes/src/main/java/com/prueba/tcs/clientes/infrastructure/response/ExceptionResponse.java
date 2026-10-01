@@ -1,7 +1,6 @@
 package com.prueba.tcs.clientes.infrastructure.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import java.util.Map;
 
 /**
@@ -11,5 +10,4 @@ import java.util.Map;
  * @param metadata extra context
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public record ExceptionResponse(String path, Map<String, Object> metadata) {
-}
+public record ExceptionResponse(String path, Map<String, Object> metadata) {}

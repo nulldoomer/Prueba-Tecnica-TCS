@@ -4,14 +4,13 @@ import com.prueba.tcs.cuentas.auditable.Auditable;
 import com.prueba.tcs.cuentas.cliente_ref.entity.ClienteRefEntity;
 import com.prueba.tcs.cuentas.cuenta.TipoCuenta;
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
-import java.math.BigDecimal;
 
 @Getter
 @Setter

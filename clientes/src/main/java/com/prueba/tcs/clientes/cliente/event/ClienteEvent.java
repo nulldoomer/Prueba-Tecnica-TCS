@@ -1,7 +1,6 @@
 package com.prueba.tcs.clientes.cliente.event;
 
 import com.prueba.tcs.clientes.cliente.entity.ClienteEntity;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -16,13 +15,7 @@ import java.util.UUID;
  * @param occurredAt when the change happened, used by consumers
  */
 public record ClienteEvent(
-        UUID eventId,
-        Type eventType,
-        UUID clienteId,
-        String nombre,
-        Boolean estado,
-        LocalDateTime occurredAt
-) {
+        UUID eventId, Type eventType, UUID clienteId, String nombre, Boolean estado, LocalDateTime occurredAt) {
 
     public enum Type {
         CREATED,
@@ -32,10 +25,13 @@ public record ClienteEvent(
 
     public static ClienteEvent of(Type type, ClienteEntity cliente) {
 
-        return new ClienteEvent(UUID.randomUUID(), type, cliente.getId(),
-                cliente.getNombre(), cliente.getEstado(),
-                LocalDateTime.now()
-        );
+        return new ClienteEvent(
+                UUID.randomUUID(),
+                type,
+                cliente.getId(),
+                cliente.getNombre(),
+                cliente.getEstado(),
+                LocalDateTime.now());
     }
 
     /**
