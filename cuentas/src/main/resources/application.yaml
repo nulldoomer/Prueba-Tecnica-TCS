@@ -20,6 +20,14 @@ spring:
     port: ${RABBITMQ_PORT:5672}
     username: ${RABBITMQ_USER:tcs}
     password: ${RABBITMQ_PASSWORD:tcs}
+    listener:
+      simple:
+        # A message that fails is logged and discarded instead of being redelivered forever
+        default-requeue-rejected: false
+
+logging:
+  pattern:
+    correlation: "[%X{correlationId:-}] "
 
 management:
   endpoints:
