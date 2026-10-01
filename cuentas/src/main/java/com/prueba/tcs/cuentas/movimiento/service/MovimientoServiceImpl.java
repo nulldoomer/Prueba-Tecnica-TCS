@@ -4,7 +4,6 @@ import com.prueba.tcs.cuentas.cuenta.entity.CuentaEntity;
 import com.prueba.tcs.cuentas.cuenta.repository.CuentaRepository;
 import com.prueba.tcs.cuentas.infrastructure.exception.ResourceNotFoundException;
 import com.prueba.tcs.cuentas.infrastructure.validation.BusinessRule;
-import com.prueba.tcs.cuentas.movimiento.TipoMovimiento;
 import com.prueba.tcs.cuentas.movimiento.dto.MovimientoRequest;
 import com.prueba.tcs.cuentas.movimiento.dto.MovimientoResponse;
 import com.prueba.tcs.cuentas.movimiento.entity.MovimientoEntity;
@@ -40,7 +39,8 @@ class MovimientoServiceImpl implements MovimientoService {
                 .orElseThrow(
                         () -> new ResourceNotFoundException("Cuenta " + request.numeroCuenta() + " no encontrada"));
 
-        MovimientoContext context = new MovimientoContext(cuenta, request.valor());
+        BigDecimal valorWithSign = request.tipoMovimiento().aplicarSigno(request.valor());
+        MovimientoContext context = new MovimientoContext(cuenta, valorWithSign);
         movimientoRules.forEach(rule -> rule.validate(context));
 
         // Saldo update and movimiento insert commit together in this transaction
@@ -50,8 +50,8 @@ class MovimientoServiceImpl implements MovimientoService {
         MovimientoEntity movimiento = MovimientoEntity.builder()
                 .cuenta(cuenta)
                 .fecha(LocalDateTime.now())
-                .tipoMovimiento(request.valor().signum() > 0 ? TipoMovimiento.DEPOSITO : TipoMovimiento.RETIRO)
-                .valor(request.valor())
+                .tipoMovimiento(request.tipoMovimiento())
+                .valor(valorWithSign)
                 .saldo(saldo)
                 .build();
 

@@ -1484,7 +1484,7 @@
                 },
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"numeroCuenta\": \"{{cuentaJoseAhorros}}\",\n  \"valor\": -575\n}",
+                  "raw": "{\n  \"numeroCuenta\": \"{{cuentaJoseAhorros}}\",\n  \"tipoMovimiento\": \"RETIRO\",\n  \"valor\": 575\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -1531,7 +1531,7 @@
                 },
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"numeroCuenta\": \"{{cuentaMarianelaCorriente}}\",\n  \"valor\": 600\n}",
+                  "raw": "{\n  \"numeroCuenta\": \"{{cuentaMarianelaCorriente}}\",\n  \"tipoMovimiento\": \"DEPOSITO\",\n  \"valor\": 600\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -1578,7 +1578,7 @@
                 },
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"numeroCuenta\": \"{{cuentaJuanAhorros}}\",\n  \"valor\": 150\n}",
+                  "raw": "{\n  \"numeroCuenta\": \"{{cuentaJuanAhorros}}\",\n  \"tipoMovimiento\": \"DEPOSITO\",\n  \"valor\": 150\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -1625,7 +1625,7 @@
                 },
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"numeroCuenta\": \"{{cuentaMarianelaAhorros}}\",\n  \"valor\": -540\n}",
+                  "raw": "{\n  \"numeroCuenta\": \"{{cuentaMarianelaAhorros}}\",\n  \"tipoMovimiento\": \"RETIRO\",\n  \"valor\": 540\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -1787,7 +1787,7 @@
                 },
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"numeroCuenta\": \"{{cuentaMarianelaAhorros}}\",\n  \"valor\": -100\n}",
+                  "raw": "{\n  \"numeroCuenta\": \"{{cuentaMarianelaAhorros}}\",\n  \"tipoMovimiento\": \"RETIRO\",\n  \"valor\": 100\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -1798,7 +1798,7 @@
               "response": []
             },
             {
-              "name": "Movimiento con valor cero",
+              "name": "Movimiento con valor cero o negativo",
               "event": [
                 {
                   "listen": "test",
@@ -1808,7 +1808,8 @@
                       "pm.test(\"Status 400 Bad Request\", () => pm.response.to.have.status(400));",
                       "const json = pm.response.json();",
                       "pm.test(\"success = false\", () => pm.expect(json.success).to.eql(false));",
-                      "pm.test(\"messageCode = MOVIMIENTO_INVALIDO\", () => pm.expect(json.messageCode).to.eql(\"MOVIMIENTO_INVALIDO\"));"
+                      "pm.test(\"messageCode = VALIDATION_ERROR\", () => pm.expect(json.messageCode).to.eql(\"VALIDATION_ERROR\"));",
+                      "pm.test(\"Detalla el campo valor\", () => pm.expect(json.result.metadata).to.have.property(\"valor\"));"
                     ]
                   }
                 }
@@ -1832,7 +1833,7 @@
                 },
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"numeroCuenta\": \"{{cuentaJoseAhorros}}\",\n  \"valor\": 0\n}",
+                  "raw": "{\n  \"numeroCuenta\": \"{{cuentaJoseAhorros}}\",\n  \"tipoMovimiento\": \"DEPOSITO\",\n  \"valor\": 0\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -1877,7 +1878,7 @@
                 },
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"numeroCuenta\": \"{{cuentaJoseCorriente}}\",\n  \"valor\": 100\n}",
+                  "raw": "{\n  \"numeroCuenta\": \"{{cuentaJoseCorriente}}\",\n  \"tipoMovimiento\": \"DEPOSITO\",\n  \"valor\": 100\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -1922,7 +1923,7 @@
                 },
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"numeroCuenta\": \"000000\",\n  \"valor\": 100\n}",
+                  "raw": "{\n  \"numeroCuenta\": \"000000\",\n  \"tipoMovimiento\": \"DEPOSITO\",\n  \"valor\": 100\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -1968,7 +1969,7 @@
                 },
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"numeroCuenta\": \"{{cuentaJoseAhorros}}\",\n  \"valor\": 1\n}",
+                  "raw": "{\n  \"numeroCuenta\": \"{{cuentaJoseAhorros}}\",\n  \"tipoMovimiento\": \"DEPOSITO\",\n  \"valor\": 1\n}",
                   "options": {
                     "raw": {
                       "language": "json"

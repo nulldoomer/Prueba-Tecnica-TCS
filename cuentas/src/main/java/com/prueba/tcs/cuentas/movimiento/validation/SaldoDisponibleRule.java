@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 /**
  * The retiro cannot leave the cuenta with a negative balance.
  */
-@Order(4)
+@Order(3)
 @Component
 class SaldoDisponibleRule implements BusinessRule<MovimientoContext> {
 

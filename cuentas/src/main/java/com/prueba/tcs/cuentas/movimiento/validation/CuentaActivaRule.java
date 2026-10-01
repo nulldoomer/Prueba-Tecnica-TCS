@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 /**
  * An inactive cuenta cannot receive movimientos.
  */
-@Order(2)
+@Order(1)
 @Component
 class CuentaActivaRule implements BusinessRule<MovimientoContext> {
 

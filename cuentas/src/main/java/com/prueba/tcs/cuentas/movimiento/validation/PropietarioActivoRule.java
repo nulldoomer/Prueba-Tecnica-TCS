@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * The cuentas of an inactive cliente cannot operate, reads the lazy cliente,
  * so it must run inside the service transaction.
  */
-@Order(3)
+@Order(2)
 @Component
 class PropietarioActivoRule implements BusinessRule<MovimientoContext> {
 

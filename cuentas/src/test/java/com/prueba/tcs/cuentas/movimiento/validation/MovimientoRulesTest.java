@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.prueba.tcs.cuentas.cuenta.entity.CuentaEntity;
-import com.prueba.tcs.cuentas.movimiento.exception.MovimientoInvalidoException;
+import com.prueba.tcs.cuentas.movimiento.TipoMovimiento;
 import com.prueba.tcs.cuentas.movimiento.exception.SaldoNoDisponibleException;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 class MovimientoRulesTest {
 
     private final SaldoDisponibleRule saldoDisponibleRule = new SaldoDisponibleRule();
-    private final ValorDistintoDeCeroRule valorDistintoDeCeroRule = new ValorDistintoDeCeroRule();
 
     @Test
     void retiroMayorAlSaldoLanzaSaldoNoDisponible() {
@@ -40,10 +39,9 @@ class MovimientoRulesTest {
     }
 
     @Test
-    void valorCeroEsInvalido() {
-        MovimientoContext context = new MovimientoContext(cuentaConSaldo("100.00"), BigDecimal.ZERO);
-
-        assertThrows(MovimientoInvalidoException.class, () -> valorDistintoDeCeroRule.validate(context));
+    void retiroSeRegistraConValorNegativoYDepositoConPositivo() {
+        assertEquals(new BigDecimal("-575"), TipoMovimiento.RETIRO.aplicarSigno(new BigDecimal("575")));
+        assertEquals(new BigDecimal("600"), TipoMovimiento.DEPOSITO.aplicarSigno(new BigDecimal("600")));
     }
 
     private static CuentaEntity cuentaConSaldo(String saldo) {
