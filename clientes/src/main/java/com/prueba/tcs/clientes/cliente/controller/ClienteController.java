@@ -48,14 +48,15 @@ public class ClienteController {
     /**
      * Paginated list.
      *
+     * @param estado optional filter, true for activos and false for inactivos
      * @param pageable page, size and sort query params.
      * @return 200 with the requested page of clientes
      */
     @GetMapping
     public ResponseEntity<ResultResponse<PagedModel<ClienteResponse>, String>> findAll(
-            @PageableDefault(sort = "nombre") Pageable pageable) {
+            @RequestParam(required = false) Boolean estado, @PageableDefault(sort = "nombre") Pageable pageable) {
 
-        return ResponseEntity.ok(ResultResponse.success(new PagedModel<>(clienteService.findAll(pageable))));
+        return ResponseEntity.ok(ResultResponse.success(new PagedModel<>(clienteService.findAll(estado, pageable))));
     }
 
     /**
@@ -99,7 +100,7 @@ public class ClienteController {
     }
 
     /**
-     * Partially updates a cliente; omitted fields are left unchanged.
+     * Partially updates a cliente, omitted fields are left unchanged.
      *
      * @param id cliente id
      * @param request fields to update
@@ -113,6 +114,28 @@ public class ClienteController {
     }
 
     /**
+     * Activates a cliente.
+     * @param id
+     * @return
+     */
+    @PatchMapping("/{id}/activar")
+    public ResponseEntity<ResultResponse<ClienteResponse, String>> activate(@PathVariable UUID id) {
+        return ResponseEntity.ok(
+                ResultResponse.success(clienteService.activateCliente(id), "Cliente activado", "CLIENTE_ACTIVATED"));
+    }
+
+    /**
+     * Deactivates a cliente.
+     * @param id
+     * @return
+     */
+    @PatchMapping("/{id}/desactivar")
+    public ResponseEntity<ResultResponse<ClienteResponse, String>> deactivate(@PathVariable UUID id) {
+        return ResponseEntity.ok(ResultResponse.success(
+                clienteService.deactivateCliente(id), "Cliente desactivado", "CLIENTE_DEACTIVATED"));
+    }
+
+    /**
      * Logical delete: the cliente is deactivated, not removed.
      *
      * @param id cliente id
@@ -120,7 +143,7 @@ public class ClienteController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<ResultResponse<Void, String>> delete(@PathVariable UUID id) {
-        clienteService.delete(id);
+        clienteService.deactivateCliente(id);
         return ResponseEntity.ok(ResultResponse.success(null, "Cliente desactivado", "CLIENTE_DEACTIVATED"));
     }
 }

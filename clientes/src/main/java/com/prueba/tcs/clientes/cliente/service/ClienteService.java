@@ -44,10 +44,11 @@ public interface ClienteService {
     /**
      * Returns a page of clientes.
      *
+     * @param estado   filter by estado, null returns all
      * @param pageable page number, size and sorting
      * @return the requested page of clientes
      */
-    Page<ClienteResponse> findAll(Pageable pageable);
+    Page<ClienteResponse> findAll(Boolean estado, Pageable pageable);
 
     /**
      * Fully replaces a cliente's data (PUT semantics).
@@ -71,10 +72,16 @@ public interface ClienteService {
     ClienteResponse update(UUID id, ClienteUpdateRequest request);
 
     /**
-     * Logically deletes a cliente by setting its estado to false.
-     *
-     * @param id cliente id
-     * @throws ResourceNotFoundException if the cliente does not exist
+     * Activate a cliente that had been deactivated before
+     * @param id
+     * @return
      */
-    void delete(UUID id);
+    ClienteResponse activateCliente(UUID id);
+
+    /**
+     * Deactivate a cliente changing its state
+     * @param id
+     * @return
+     */
+    ClienteResponse deactivateCliente(UUID id);
 }

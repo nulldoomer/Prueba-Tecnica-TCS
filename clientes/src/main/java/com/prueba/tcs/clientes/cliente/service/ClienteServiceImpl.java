@@ -69,8 +69,12 @@ class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Page<ClienteResponse> findAll(Pageable pageable) {
-        return clienteRepository.findAll(pageable).map(clienteMapper::toResponse);
+    public Page<ClienteResponse> findAll(Boolean estado, Pageable pageable) {
+
+        Page<ClienteEntity> clientes =
+                estado == null ? clienteRepository.findAll(pageable) : clienteRepository.findByEstado(estado, pageable);
+
+        return clientes.map(clienteMapper::toResponse);
     }
 
     @Override
@@ -112,15 +116,32 @@ class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional
-    public void delete(UUID id) {
+    public ClienteResponse activateCliente(UUID id) {
 
-        // Logical delete: the record is kept to have historic data.
-        ClienteEntity cliente = getCliente(id);
-        cliente.setEstado(false);
-        eventPublisher.publishEvent(ClienteEvent.of(ClienteEvent.Type.DEACTIVATED, cliente));
+        ClienteEntity entity = getCliente(id);
+        entity.setEstado(true);
+
+        ClienteEntity updated = clienteRepository.saveAndFlush(entity);
+        eventPublisher.publishEvent(ClienteEvent.of(ClienteEvent.Type.UPDATED, updated));
+
+        return clienteMapper.toResponse(updated);
     }
 
-    // TODO: Implementar busquedas personalizadas por campos y cambios de estados
+    @Override
+    @Transactional
+    public ClienteResponse deactivateCliente(UUID id) {
+
+        ClienteEntity entity = getCliente(id);
+        entity.setEstado(false);
+
+        // Logical delete: the record is kept to have historic data.
+        ClienteEntity updated = clienteRepository.saveAndFlush(entity);
+        eventPublisher.publishEvent(ClienteEvent.of(ClienteEvent.Type.DEACTIVATED, updated));
+
+        return clienteMapper.toResponse(updated);
+    }
+
+    // TODO: Implementar busquedas personalizadas por campos
 
     // =====================
     // ----- HELPERS --------
