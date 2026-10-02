@@ -11,6 +11,12 @@ Cada servicio tiene su propia base de datos (`clientes` y `cuentas`) en el mismo
 
 ![Modelo de datos](docs/data-model.png)
 
+El script completo de base de datos, con las dos bases, sus tablas y restricciones, está en [`BaseDatos.sql`](BaseDatos.sql). No hace falta ejecutarlo para levantar el proyecto: cada servicio crea sus tablas al arrancar con Flyway (`src/main/resources/db/migration`). Si se quiere crear el esquema a mano en un PostgreSQL vacío:
+
+```bash
+psql -U postgres -f BaseDatos.sql
+```
+
 ## Levantar el proyecto
 
 Solo se necesita Docker con Docker Compose.
