@@ -1,6 +1,7 @@
 package com.prueba.tcs.cuentas.cuenta.repository;
 
 import com.prueba.tcs.cuentas.cuenta.entity.CuentaEntity;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -24,4 +25,6 @@ public interface CuentaRepository extends JpaRepository<CuentaEntity, UUID> {
     Optional<CuentaEntity> findByNumeroCuenta(String numeroCuenta);
 
     boolean existsByNumeroCuenta(String numeroCuenta);
+
+    List<CuentaEntity> findByClienteClienteIdOrderByNumeroCuenta(UUID clienteId);
 }

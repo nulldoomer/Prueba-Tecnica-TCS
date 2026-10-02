@@ -2173,6 +2173,238 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Reportes",
+      "item": [
+        {
+          "name": "1. Estado de cuenta",
+          "description": "Caso 5 del documento.",
+          "item": [
+            {
+              "name": "Estado de cuenta de Marianela Montalvo",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 200 OK\", () => pm.response.to.have.status(200));",
+                      "const json = pm.response.json();",
+                      "pm.test(\"success = true\", () => pm.expect(json.success).to.eql(true));",
+                      "pm.test(\"Cliente = Marianela Montalvo\", () => pm.expect(json.result.cliente).to.eql(\"Marianela Montalvo\"));",
+                      "pm.test(\"Tiene 2 cuentas\", () => pm.expect(json.result.cuentas.length).to.eql(2));",
+                      "const cuenta = variable => json.result.cuentas.find(c => c.numeroCuenta === pm.collectionVariables.get(variable));",
+                      "pm.test(\"225487: saldo inicial 100, movimiento 600, saldo disponible 700\", () => {",
+                      "  const movimientos = cuenta(\"cuentaMarianelaCorriente\").movimientos;",
+                      "  pm.expect(movimientos.length).to.eql(1);",
+                      "  pm.expect(movimientos[0].saldoInicial).to.eql(100);",
+                      "  pm.expect(movimientos[0].valor).to.eql(600);",
+                      "  pm.expect(movimientos[0].saldo).to.eql(700);",
+                      "});",
+                      "pm.test(\"496825: saldo inicial 540, movimiento -540, saldo disponible 0\", () => {",
+                      "  const movimientos = cuenta(\"cuentaMarianelaAhorros\").movimientos;",
+                      "  pm.expect(movimientos.length).to.eql(1);",
+                      "  pm.expect(movimientos[0].saldoInicial).to.eql(540);",
+                      "  pm.expect(movimientos[0].valor).to.eql(-540);",
+                      "  pm.expect(movimientos[0].saldo).to.eql(0);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrlCuentas}}/reportes?fecha=2026-10-01,2026-10-10&clienteId={{marianelaId}}",
+                  "host": [
+                    "{{baseUrlCuentas}}"
+                  ],
+                  "path": [
+                    "reportes"
+                  ],
+                  "query": [
+                    {
+                      "key": "fecha",
+                      "value": "2026-10-01,2026-10-10"
+                    },
+                    {
+                      "key": "clienteId",
+                      "value": "{{marianelaId}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "2. Errores",
+          "item": [
+            {
+              "name": "Rango de fechas invertido (400 RANGO_FECHAS_INVALIDO)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 400 Bad Request\", () => pm.response.to.have.status(400));",
+                      "const json = pm.response.json();",
+                      "pm.test(\"success = false\", () => pm.expect(json.success).to.eql(false));",
+                      "pm.test(\"messageCode = RANGO_FECHAS_INVALIDO\", () => pm.expect(json.messageCode).to.eql(\"RANGO_FECHAS_INVALIDO\"));"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrlCuentas}}/reportes?fecha=2022-02-10,2022-02-01&clienteId={{marianelaId}}",
+                  "host": [
+                    "{{baseUrlCuentas}}"
+                  ],
+                  "path": [
+                    "reportes"
+                  ],
+                  "query": [
+                    {
+                      "key": "fecha",
+                      "value": "2022-02-10,2022-02-01"
+                    },
+                    {
+                      "key": "clienteId",
+                      "value": "{{marianelaId}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Fecha mal escrita (400 TYPE_MISMATCH)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 400 Bad Request\", () => pm.response.to.have.status(400));",
+                      "const json = pm.response.json();",
+                      "pm.test(\"success = false\", () => pm.expect(json.success).to.eql(false));",
+                      "pm.test(\"messageCode = TYPE_MISMATCH\", () => pm.expect(json.messageCode).to.eql(\"TYPE_MISMATCH\"));"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrlCuentas}}/reportes?fecha=2022-13-45&clienteId={{marianelaId}}",
+                  "host": [
+                    "{{baseUrlCuentas}}"
+                  ],
+                  "path": [
+                    "reportes"
+                  ],
+                  "query": [
+                    {
+                      "key": "fecha",
+                      "value": "2022-13-45"
+                    },
+                    {
+                      "key": "clienteId",
+                      "value": "{{marianelaId}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Cliente inexistente (404)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 404 Not Found\", () => pm.response.to.have.status(404));",
+                      "const json = pm.response.json();",
+                      "pm.test(\"success = false\", () => pm.expect(json.success).to.eql(false));",
+                      "pm.test(\"messageCode = RESOURCE_NOT_FOUND\", () => pm.expect(json.messageCode).to.eql(\"RESOURCE_NOT_FOUND\"));"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrlCuentas}}/reportes?fecha=2022-02-01&clienteId=00000000-0000-0000-0000-000000000000",
+                  "host": [
+                    "{{baseUrlCuentas}}"
+                  ],
+                  "path": [
+                    "reportes"
+                  ],
+                  "query": [
+                    {
+                      "key": "fecha",
+                      "value": "2022-02-01"
+                    },
+                    {
+                      "key": "clienteId",
+                      "value": "00000000-0000-0000-0000-000000000000"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Sin parametro fecha (400)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 400 Bad Request\", () => pm.response.to.have.status(400));",
+                      "const json = pm.response.json();",
+                      "pm.test(\"success = false\", () => pm.expect(json.success).to.eql(false));"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrlCuentas}}/reportes?clienteId={{marianelaId}}",
+                  "host": [
+                    "{{baseUrlCuentas}}"
+                  ],
+                  "path": [
+                    "reportes"
+                  ],
+                  "query": [
+                    {
+                      "key": "clienteId",
+                      "value": "{{marianelaId}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
     }
   ],
   "variable": [
