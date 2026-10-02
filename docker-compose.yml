@@ -31,5 +31,40 @@ services:
       timeout: 5s
       retries: 10
 
+  clientes:
+    build: ./clientes
+    container_name: tcs-clientes
+    environment:
+      DB_HOST: postgres
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USER: ${RABBITMQ_USER:-tcs}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-tcs}
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  cuentas:
+    build: ./cuentas
+    container_name: tcs-cuentas
+    environment:
+      DB_HOST: postgres
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USER: ${RABBITMQ_USER:-tcs}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-tcs}
+    ports:
+      - "8082:8082"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
 volumes:
   postgres_data:

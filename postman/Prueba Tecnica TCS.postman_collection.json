@@ -234,6 +234,96 @@
               "response": []
             },
             {
+              "name": "Listar clientes activos (estado=true)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 200 OK\", () => pm.response.to.have.status(200));",
+                      "const json = pm.response.json();",
+                      "pm.test(\"success = true\", () => pm.expect(json.success).to.eql(true));",
+                      "pm.test(\"Todos activos\", () => json.result.content.forEach(c => pm.expect(c.estado).to.eql(true)));"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrlClientes}}/clientes?estado=true&page=0&size=10",
+                  "host": [
+                    "{{baseUrlClientes}}"
+                  ],
+                  "path": [
+                    "clientes"
+                  ],
+                  "query": [
+                    {
+                      "key": "estado",
+                      "value": "true"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Listar clientes inactivos (estado=false)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 200 OK\", () => pm.response.to.have.status(200));",
+                      "const json = pm.response.json();",
+                      "pm.test(\"success = true\", () => pm.expect(json.success).to.eql(true));",
+                      "pm.test(\"Todos inactivos\", () => json.result.content.forEach(c => pm.expect(c.estado).to.eql(false)));"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrlClientes}}/clientes?estado=false&page=0&size=10",
+                  "host": [
+                    "{{baseUrlClientes}}"
+                  ],
+                  "path": [
+                    "clientes"
+                  ],
+                  "query": [
+                    {
+                      "key": "estado",
+                      "value": "false"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
               "name": "Buscar cliente por id (Jose Lema)",
               "event": [
                 {
@@ -301,7 +391,7 @@
           ]
         },
         {
-          "name": "4. Eliminacion logica",
+          "name": "4. Activacion y desactivacion",
           "item": [
             {
               "name": "Crear cliente temporal",
@@ -419,9 +509,77 @@
                 }
               },
               "response": []
+            },
+            {
+              "name": "Activar cliente temporal",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 200 OK\", () => pm.response.to.have.status(200));",
+                      "const json = pm.response.json();",
+                      "pm.test(\"success = true\", () => pm.expect(json.success).to.eql(true));",
+                      "pm.test(\"estado = true\", () => pm.expect(json.result.estado).to.eql(true));",
+                      "pm.test(\"messageCode = CLIENTE_ACTIVATED\", () => pm.expect(json.messageCode).to.eql(\"CLIENTE_ACTIVATED\"));"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrlClientes}}/clientes/{{temporalId}}/activar",
+                  "host": [
+                    "{{baseUrlClientes}}"
+                  ],
+                  "path": [
+                    "clientes",
+                    "{{temporalId}}",
+                    "activar"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Desactivar cliente temporal (PATCH)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 200 OK\", () => pm.response.to.have.status(200));",
+                      "const json = pm.response.json();",
+                      "pm.test(\"success = true\", () => pm.expect(json.success).to.eql(true));",
+                      "pm.test(\"estado = false\", () => pm.expect(json.result.estado).to.eql(false));",
+                      "pm.test(\"messageCode = CLIENTE_DEACTIVATED\", () => pm.expect(json.messageCode).to.eql(\"CLIENTE_DEACTIVATED\"));"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrlClientes}}/clientes/{{temporalId}}/desactivar",
+                  "host": [
+                    "{{baseUrlClientes}}"
+                  ],
+                  "path": [
+                    "clientes",
+                    "{{temporalId}}",
+                    "desactivar"
+                  ]
+                }
+              },
+              "response": []
             }
           ],
-          "description": "Se desactiva un cliente temporal para que Jose, Marianela y Juan sigan activos en los casos de cuentas y movimientos."
+          "description": "Se usa un cliente temporal para que Jose, Marianela y Juan sigan activos en los casos de cuentas y movimientos. El cliente temporal termina inactivo: lo usa el test de cuenta para cliente inactivo."
         },
         {
           "name": "3. Actualizaciones",
@@ -711,6 +869,39 @@
                       "key": "sort",
                       "value": "campoInexistente"
                     }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Activar cliente inexistente",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status 404 Not Found\", () => pm.response.to.have.status(404));",
+                      "const json = pm.response.json();",
+                      "pm.test(\"success = false\", () => pm.expect(json.success).to.eql(false));",
+                      "pm.test(\"messageCode = RESOURCE_NOT_FOUND\", () => pm.expect(json.messageCode).to.eql(\"RESOURCE_NOT_FOUND\"));"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrlClientes}}/clientes/00000000-0000-0000-0000-000000000000/activar",
+                  "host": [
+                    "{{baseUrlClientes}}"
+                  ],
+                  "path": [
+                    "clientes",
+                    "00000000-0000-0000-0000-000000000000",
+                    "activar"
                   ]
                 }
               },
